@@ -20,7 +20,7 @@ If you came here expecting to find the TestRPC, you're in the right place! Truff
 `ganache-cli` is written in Javascript and distributed as a Node package via `npm`. Make sure you have Node.js (>= v6.11.5) installed.
 
 ```Bash
-npm install -g ganache-cli
+npm install -g @shyftnetwork/shyft_ganache-cli
 ```
 
 Having problems? Be sure to check out the [FAQ](https://github.com/trufflesuite/ganache-cli/wiki/FAQ) and if you're still having issues and you're sure its a problem with `ganache-cli` please open an issue.

@@ -16,11 +16,17 @@ module.exports = {
     umdNamedDefine: true
   },
   devtool: 'source-map',
+  module: {
+      rules: [
+          { test: /\.node$/, use: 'node-loader' }
+      ]
+  },
   resolve: {
     alias: {
       "ws": path.join(__dirname, "..", "./nil.js"),
       "scrypt": "js-scrypt",
-      "secp256k1": path.join(__dirname, "..", "node_modules", "secp256k1", "elliptic.js")
+      "secp256k1": path.join(__dirname, "..", "node_modules", "secp256k1", "elliptic.js"),
+      "sha3": path.join(__dirname, "../node_modules/sha3/build/Release/sha3.node")
     }
   }
 }

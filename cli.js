@@ -2,9 +2,9 @@
 // `yargs/yargs` required to work with webpack, see here.
 // https://github.com/yargs/yargs/issues/781
 var yargs = require('yargs/yargs');
-var Ganache = require("ganache-core");
+var Ganache = require("@shyftnetwork/shyft_ganache-core");
 var pkg = require("./package.json");
-var corepkg = require("./node_modules/ganache-core/package.json");
+var corepkg = require("./node_modules/@shyftnetwork/shyft_ganache-core/package.json");
 var URL = require("url");
 var Web3 = require("web3");
 var web3 = new Web3(); // Used only for its BigNumber library.
@@ -144,7 +144,7 @@ if (options.fork) {
 
 var server = Ganache.server(options);
 
-console.log("Ganache CLI v" + pkg.version + " (ganache-core: " + corepkg.version + ")");
+console.log("Ganache CLI v" + pkg.version + " (@shyftnetwork/shyft_ganache-core: " + corepkg.version + ")");
 
 server.listen(options.port, options.hostname, function(err, result) {
   if (err) {

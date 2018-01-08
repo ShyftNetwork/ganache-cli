@@ -1,6 +1,6 @@
 {
-  "name": "ganache-cli",
-  "version": "6.0.3",
+  "name": "@shyftnetwork/shyft_ganache-cli",
+  "version": "6.0.5",
   "bin": {
     "ganache-cli": "./build/cli.node.js"
   },
@@ -18,14 +18,16 @@
     "prepublish": "npm run build"
   },
   "devDependencies": {
-    "ganache-core": "2.0.2",
+    "@shyftnetwork/shyft_ganache-core": "^2.0.4",
     "yargs": "^7.0.2"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/trufflesuite/ganache-cli"
+    "url": "https://github.com/shyftnetwork/shyft_ganache-cli"
   },
   "dependencies": {
-    "webpack": "^3.0.0"
+    "leveldown": "^2.1.1",
+    "node-loader": "^0.6.0",
+    "webpack": "^3.10.0"
   }
 }

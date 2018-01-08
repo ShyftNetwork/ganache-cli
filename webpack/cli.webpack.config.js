@@ -17,7 +17,8 @@ module.exports = {
   devtool: 'source-map',
   module: {
     rules: [
-      { test: /\.js$/, use: "shebang-loader" }
+      { test: /\.js$/, use: "shebang-loader" },
+      { test: /\.node$/, use: 'node-loader' }
     ]
   },
   plugins: [
@@ -32,9 +33,13 @@ module.exports = {
   ],
   resolve: {
     alias: {
-      "ws": path.join(__dirname, "..", "./nil.js"),
-      "scrypt": "js-scrypt",
-      "secp256k1": path.join(__dirname, "..", "node_modules", "secp256k1", "elliptic.js")
+        "ws": path.join(__dirname, "..", "./nil.js"),
+        "scrypt": "js-scrypt",
+        "secp256k1": path.join(__dirname, "..", "node_modules", "secp256k1", "elliptic.js"),
+        "sha3": path.join(__dirname, "../node_modules/sha3/build/Release/sha3.node")
     }
-  }
+  },
+  // externals: [
+  //   "leveldown"
+  // ]
 }
