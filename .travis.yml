@@ -1,18 +1,25 @@
-sudo: required
-language: generic
-services:
-env:
-- TEST=repo
-before_deploy:
-- echo "test script before deployment"
+language: node_js
+node_js:
+  - "node"
+  - "lts/boron"
+
 addons:
-    apt:
-      update: true
-deploy:
-  provider: npm
-  email: jayper@shyft.network
-  api_key:
-    secure: "23257b0f-faa7-49af-b454-ead25bb2f1d4"
-  on:
-    repo: ShyftNetwork/shyft_ganache-cli
-    branch: jay_travis_shyft_ganache-cli
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.7
+      - g++-4.7
+
+before_install:
+  - if [ $TRAVIS_OS_NAME == "linux" ]; then
+      export CC="gcc-4.7";
+      export CXX="g++-4.7";
+      export LINK="gcc-4.7";
+      export LINKXX="g++-4.7";
+    fi
+  - nvm --version
+  - node --version
+  - npm --version
+  - gcc --version
+  - g++ --version
