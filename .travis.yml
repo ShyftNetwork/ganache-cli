@@ -5,16 +5,6 @@ env:
 - TEST=repo
 before_deploy:
 - echo "test script before deployment"
-script:
-- |
-  docker run -it --rm --name ${TEST} \
-      -e TRAVIS_REPO_SLUG \
-      -e TRAVIS_PULL_REQUEST \
-      -e TRAVIS_PULL_REQUEST_SLUG \
-      -e TRAVIS_PULL_REQUEST_BRANCH \
-      -e TRAVIS_BRANCH \
-      -e TEST \
-    ganache-cli/ci:latest run_tests
 addons:
     apt:
       update: true
