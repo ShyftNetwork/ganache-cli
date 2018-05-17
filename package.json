@@ -33,5 +33,5 @@
     "source-map-support": "^0.5.3",
     "webpack-cli": "^2.0.9"
   },
-  "license": "MIT"
+  "license": "ShyftNetwork"
 }

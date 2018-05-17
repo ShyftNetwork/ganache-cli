@@ -1,25 +1,27 @@
 language: node_js
 node_js:
-  - "node"
-  - "lts/boron"
-
+- node
+- lts/boron
 addons:
   apt:
     sources:
-      - ubuntu-toolchain-r-test
+    - ubuntu-toolchain-r-test
     packages:
-      - gcc-4.7
-      - g++-4.7
-
+    - gcc-4.7
+    - g++-4.7
 before_install:
-  - if [ $TRAVIS_OS_NAME == "linux" ]; then
-      export CC="gcc-4.7";
-      export CXX="g++-4.7";
-      export LINK="gcc-4.7";
-      export LINKXX="g++-4.7";
-    fi
-  - nvm --version
-  - node --version
-  - npm --version
-  - gcc --version
-  - g++ --version
+- if [ $TRAVIS_OS_NAME == "linux" ]; then export CC="gcc-4.7"; export CXX="g++-4.7";
+  export LINK="gcc-4.7"; export LINKXX="g++-4.7"; fi
+- nvm --version
+- node --version
+- npm --version
+- gcc --version
+- g++ --version
+deploy:
+  provider: npm
+  email: jayper@shyft.network
+  api_key:
+    secure: mYFdxT0XE3P2O/2dwYZ9S1OtUgJhCjL6b1SOxzPFKZ0nLF6ab2tDOvwjs0+tmkJi7GMuoV5iVx7IQwR3H4DuJoB7CJ2/zLfKAT5Wko2Jx7OHga70MZI9HhzJqBAzk9uuiuRuPL7iKZYjF+pG+lEfgiPt5nE0XHYUiZIP8dW0sFwiy1+KLykLKN6tYWhd9kNp4wl3pPA9C3IP3bHc+fSx9lfuefhCYdhOuLWBYMQP/jBUO5OGUir8CvfgJqew++qrrhvqVF0glkE3BDRyNK2xNbrg9fabg6RJ7VDJ3MLy40du2bajnUW+xCJrltsI2Wk3BH8AV9mz7+gslkXjH4baZ1rr7nxb0ithj1/gEVOxZKX4uXDhL8Z7dlF/AY6a/kdXJx9SksxJYnBtXyfqzS6b04nzm0+dQ8Oe4rcoylJSzR2cHSaQ7vn2SsEsEeshlS6FcUqHxgru3lzpAxmZO5vl0wMdtx3gjC4x9QMbpkzv/hGuOr5FKN314LSd+2EOZth4ib+8X6ptkquyqnPCrZFK/lhMAym1DlQQ4pgeWKxSsqxmvac38GecVKL9gy73p1Nz0UzoZFiiL3FOlytqdSE+AJDqZtSDs/zutryBnRcSYe15ShN+JvBIeHXcFI2yHpzKdybZh7k+stj1e/E8dKD6aRJai0peyXEUjzomHitV3Bk=
+  on:
+    tags: true
+    repo: ShyftNetwork/shyft_ganache-cli
