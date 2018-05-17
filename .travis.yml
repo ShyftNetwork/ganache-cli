@@ -1,7 +1,5 @@
-language: node_js
-node_js:
-- node
-- lts/boron
+sudo: required
+language: generic
 addons:
   apt:
     sources:
