@@ -12,7 +12,7 @@ deploy:
   provider: npm
   email: jayper@shyft.network
   api_key:
-    secure: 23257b0f-faa7-49af-b454-ead25bb2f1d4
+    secure: "23257b0f-faa7-49af-b454-ead25bb2f1d4"
   on:
     repo: ShyftNetwork/shyft_ganache-cli
     branch: jay_travis_shyft_ganache-cli
