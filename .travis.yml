@@ -9,11 +9,4 @@ addons:
     packages:
     - gcc-4.7
     - g++-4.7
-deploy:
-  provider: npm
-  email: jayper@shyft.network
-  api_key:
-    secure: VENIg5Zdtpm14Q1TasD7HngU/ubg/6w2QcAHr5ZOVdDj6X8W2OSZbHuJ3T95SYl3P+j4ZkaUpgeHUh97xNO1nzGUhtChMiitGlcUkgNEKn97i+zW01OYy3u5r8IPVdYYvudNcI0/M3k+OMUkzb7AslgJLmDi9pEiJWDDsfMhg/QwlcSL+VOLx9k7ROF1phP/KOnPj4vIpDS8k2cF97sZMXrDy+3m7qwDVTdg5b9WXD9pyxBGuTkB4f7xdWhjzaxdBiuCdP74jivslqJ0f8kzNEBaLLY9C8sgmug8c9j0MhrM7JDd8Vs0zH/jh86FQg1YeKD1BdxjR23K4TdyqGdiuVrE/2lo9W5pzjRUTwqMD6q+h4X3Weq+e9dCNElUj9UbW24ztK4gaftyuDdTFh7pVeiyFtR3ngStQcIVMktdtBWSS6AqNINoMKDsgVXKk20Q7aDhQx0SK3Pa4MIY6CXHgv6e3/9AaqqjX+5mWSjAV4X7xpVkDIPDgZlGbW1QC1Kh1OcVg/hMPSUe2w/cfQ3c4fYnzmDDmUXQs4L+H4IRaYO1/eLIF7ZGKW8AvMNCv3bWrm2MhQIM6vxrDzL1u3K31nSbWAidZyNQsYuckFY3OtH/I0nH1lKstZqIyqGepML9Xsd0IktcHj/FuiQSHJrrMOvwUgjivP/XsAnAqSz4Kqc=
-  on:
-    tags: true
-    repo: ShyftNetwork/shyft_ganache-cli
+
