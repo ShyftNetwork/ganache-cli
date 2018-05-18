@@ -13,3 +13,4 @@ deploy:
   on:
     repo: ShyftNetwork/shyft_ganache-cli
     branch: jay_travis_shyft_ganache-cli
+  skip_cleanup: true
