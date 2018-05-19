@@ -206,3 +206,6 @@ docker build -t trufflesuite/ganache-cli .
 
 This is a distribution package where the core code is bundled to support browsers and reduce installation issues on all platforms. You can contribute to the core code via [ganache-core](https://github.com/trufflesuite/ganache-core).
 
+### License
+ShyftNetwork
+
