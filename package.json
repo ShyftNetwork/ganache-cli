@@ -1,6 +1,6 @@
 {
-  "name": "ganache-cli",
-  "version": "6.1.1",
+  "name": "@shyftnetwork/shyftnet_ganache-cli",
+  "version": "6.1.4",
   "bin": {
     "ganache-cli": "./build/cli.node.js"
   },
@@ -27,11 +27,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/trufflesuite/ganache-cli"
+    "url": "https://github.com/shyftnetwork/shyft_ganache-cli"
   },
   "dependencies": {
     "source-map-support": "^0.5.3",
     "webpack-cli": "^2.0.9"
   },
-  "license": "MIT"
+  "license": "Shyft"
 }
