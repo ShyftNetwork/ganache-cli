@@ -5,64 +5,19 @@ require('source-map-support/register')
 
 // `yargs/yargs` required to work with webpack, see here.
 // https://github.com/yargs/yargs/issues/781
-var yargs = require('yargs/yargs');
-var Ganache = require("ganache-core");
+var yargs = require('yargs');
+var Ganache = require("@shyftnetwork/shyft_ganache-core");
 var pkg = require("./package.json");
-var corepkg = require("./node_modules/ganache-core/package.json");
+var corepkg = require("./node_modules/@shyftnetwork/shyft_ganache-core/package.json");
 var URL = require("url");
 var fs = require("fs");
-var to = require("ganache-core/lib/utils/to");
+var initArgs = require("./args")
+var BN = require("bn.js");
+var to = require("@shyftnetwork/shyft_ganache-core/lib/utils/to");
 
-var parser = yargs()
-.option("unlock", {
-  type: "string",
-  alias: "u"
-});
+var detailedVersion = "Ganache CLI v" + pkg.version + " (@shyftnetwork/shyft_ganache-core: " + corepkg.version + ")";
 
-var argv = parser.parse(process.argv);
-
-if (argv.help || argv['?']) {
-  console.log("");
-  console.log("ganache-cli: Fast Ethereum RPC client for testing and development");
-  console.log("  Full docs: https://github.com/trufflesuite/ganache-cli");
-  console.log("");
-  console.log("Usage: ganache-cli [options]");
-  console.log("  options:");
-  console.log("  --port/-p <port to bind to, default 8545>");
-  console.log("  --host/-h <host to bind to, default 127.0.0.1>");
-  console.log("  --fork/-f <url>   (Fork from another currently running Ethereum client at a given block)");
-  console.log("");
-  console.log("  --db <db path>   (directory to save chain db)");
-  console.log("  --seed/-s <seed value for PRNG, default random>");
-  console.log("  --deterministic/-d     (uses fixed seed)");
-  console.log("  --mnemonic/-m <mnemonic>");
-  console.log("");
-  console.log("  --accounts/-a <number of accounts to generate at startup>   (ignored when using --account flag)");
-  console.log("  --defaultBalanceEther/-e <Amount of ether to assign each test account, default 100.0>   (ignored when using --account flag)");
-  console.log("  --account <privatekey>,<balance>   (Can be specified multiple times. Note that private keys are 64 characters long,");
-  console.log("                                       and must be input as a 0x-prefixed hex string. Balance can either be input as an");
-  console.log("                                       integer or 0x-prefixed hex value specifying the amount of wei in that account.)");
-  console.log("");
-  console.log("  --acctKeys <path to file>   (saves generated accounts and private keys as JSON object in specified file)");
-  console.log("  --secure/-n   (Lock accounts by default)");
-  console.log("  --unlock <accounts>   (Comma-separated list of accounts or indices to unlock)");
-  console.log("");
-  console.log("  --noVMErrorsOnRPCResponse   (Do not transmit transaction failures as RPC errors. Enable this flag for error reporting behaviour which is compatible with other clients such as geth and Parity.)");
-  console.log("");
-  console.log("  --blockTime/-b <block time in seconds> (Will instamine if option omitted. Avoid using unless your test cases require interval mining.)");
-  console.log("  --networkId/-i <network id> (default current time)");
-  console.log("  --gasPrice/-g <gas price>   (default 20000000000)");
-  console.log("  --gasLimit/-l <gas limit>   (default 90000)");
-  console.log("");
-  console.log("  --debug       (Output VM opcodes for debugging)");
-  console.log("  --verbose/-v");
-  console.log("  --mem         (Only show memory output, not tx history)");
-  console.log("");
-  console.log("");
-  console.log("  --help / -?    (this output)");
-  console.log("");
-  process.exit(0);
-}
+var argv = initArgs(yargs, detailedVersion).argv;
 
 function parseAccounts(accounts) {
   function splitAccount(account) {
@@ -85,7 +40,7 @@ function parseAccounts(accounts) {
   return ret;
 }
 
-if (argv.d || argv.deterministic) {
+if (argv.d) {
   argv.s = "TestRPC is awesome!"; // Seed phrase; don't change to Ganache, maintain original determinism
 }
 
@@ -108,26 +63,27 @@ if (argv.mem === true) {
 }
 
 var options = {
-  port: argv.p || argv.port || "8545",
-  hostname: argv.h || argv.hostname,
+  port: argv.p,
+  hostname: argv.h,
   debug: argv.debug,
-  seed: argv.s || argv.seed,
-  mnemonic: argv.m || argv.mnemonic,
-  total_accounts: argv.a || argv.accounts,
-  default_balance_ether: argv.e || argv.defaultBalanceEther,
-  blockTime: argv.b || argv.blockTime,
-  gasPrice: argv.g || argv.gasPrice,
-  gasLimit: argv.l || argv.gasLimit,
+  seed: argv.s,
+  mnemonic: argv.m,
+  total_accounts: argv.a,
+  default_balance_ether: argv.e,
+  blockTime: argv.b,
+  gasPrice: argv.g,
+  gasLimit: argv.l,
   accounts: parseAccounts(argv.account),
   unlocked_accounts: argv.unlock,
-  fork: argv.f || argv.fork || false,
-  network_id: argv.i || argv.networkId,
-  verbose: argv.v || argv.verbose,
-  secure: argv.n || argv.secure || false,
-  db_path: argv.db || null,
-  account_keys_path: argv.acctKeys || null,
+  fork: argv.f,
+  network_id: argv.i,
+  verbose: argv.v,
+  secure: argv.n,
+  db_path: argv.db,
+  account_keys_path: argv.acctKeys,
   vmErrorsOnRPCResponse: !argv.noVMErrorsOnRPCResponse,
-  logger: logger
+  logger: logger,
+  allowUnlimitedContractSize: argv.allowUnlimitedContractSize
 }
 
 var fork_address;
@@ -150,7 +106,7 @@ if (options.fork) {
 
 var server = Ganache.server(options);
 
-console.log("Ganache CLI v" + pkg.version + " (ganache-core: " + corepkg.version + ")");
+console.log(detailedVersion);
 
 server.listen(options.port, options.hostname, function(err, result) {
   if (err) {
@@ -168,7 +124,8 @@ server.listen(options.port, options.hostname, function(err, result) {
   var addresses = Object.keys(accounts);
 
   addresses.forEach(function(address, index) {
-    var line = "(" + index + ") " + address;
+    var balance = new BN(accounts[address].account.balance).divRound(new BN("1000000000000000000")).toString();
+    var line = "(" + index + ") " + address + " (~" + balance + " ETH)";
 
     if (state.isUnlocked(address) == false) {
       line += " 🔒";
@@ -182,7 +139,7 @@ server.listen(options.port, options.hostname, function(err, result) {
   console.log("==================");
 
   addresses.forEach(function(address, index) {
-    console.log("(" + index + ") " + accounts[address].secretKey.toString("hex"));
+    console.log("(" + index + ") " + "0x" + accounts[address].secretKey.toString("hex"));
   });
 
 
@@ -234,7 +191,7 @@ server.listen(options.port, options.hostname, function(err, result) {
   }
 
   console.log("");
-  console.log("Listening on " + (options.hostname || "localhost") + ":" + options.port);
+  console.log("Listening on " + options.hostname + ":" + options.port);
 });
 
 process.on('uncaughtException', function(e) {
