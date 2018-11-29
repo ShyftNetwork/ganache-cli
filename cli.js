@@ -8,7 +8,7 @@ require('source-map-support/register')
 var yargs = require('yargs');
 var Ganache = require("@shyftnetwork/shyft_ganache-core");
 var pkg = require("./package.json");
-var corepkg = require("./node_modules/@shyftnetwork/shyft_ganache-core/package.json");
+var corepkg = require("@shyftnetwork/shyft_ganache-core/package.json");
 var URL = require("url");
 var fs = require("fs");
 var initArgs = require("./args")
@@ -17,7 +17,8 @@ var to = require("@shyftnetwork/shyft_ganache-core/lib/utils/to");
 
 var detailedVersion = "Ganache CLI v" + pkg.version + " (@shyftnetwork/shyft_ganache-core: " + corepkg.version + ")";
 
-var argv = initArgs(yargs, detailedVersion).argv;
+var isDocker = "DOCKER" in process.env && process.env.DOCKER.toLowerCase() === "true";
+var argv = initArgs(yargs, detailedVersion, isDocker).argv;
 
 function parseAccounts(accounts) {
   function splitAccount(account) {
@@ -49,6 +50,13 @@ if (typeof argv.unlock == "string") {
 }
 
 var logger = console;
+
+// If quiet argument passed, no output
+if (argv.q === true){
+  logger = {
+    log: function() {}
+  };
+}
 
 // If the mem argument is passed, only show memory output,
 // not transaction history.
@@ -83,7 +91,9 @@ var options = {
   account_keys_path: argv.acctKeys,
   vmErrorsOnRPCResponse: !argv.noVMErrorsOnRPCResponse,
   logger: logger,
-  allowUnlimitedContractSize: argv.allowUnlimitedContractSize
+  allowUnlimitedContractSize: argv.allowUnlimitedContractSize,
+  time: argv.t,
+  keepAliveTimeout: argv.keepAliveTimeout
 }
 
 var fork_address;
