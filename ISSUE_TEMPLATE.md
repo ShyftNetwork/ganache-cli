@@ -7,21 +7,8 @@ CAREFULLY.
 
 <!--- Please provide a short summary of the issue in the Title above -->
 
-<!--- When you see empty square brackets below, that's a checkbox. Replace with
+<!--- When you see empty square brackets below, that's a checkbox. Replace the space with
 [x] to check the box -->
-
-* I asked about this on [gitter](https://gitter.im/ConsenSys/truffle): [ ]
-* Link to my question on gitter: <!-- delete this line if not applicable -->
-
-<!---
-
-You can get a link to your gitter question by rt-clicking the timestamp of your
-post and hitting "Copy Link", or by clicking the timestamp and copying the URL
-from your browser's address bar.
-
-Truffle gitter: https://gitter.im/ConsenSys/truffle
-
--->
 
 
 ## Expected Behavior
@@ -51,9 +38,7 @@ behavior.
 
 Not obligatory, but this is the place to suggest the underlying cause and
 possible fix for the bug, if you have one, or ideas how to implement the
-addition or change. We'll be sure to credit your ideas in the commit log, or
-better yet, submit a PR and you'll get credit for the whole thing.
-
+addition or change.
 
 -->
 
@@ -64,9 +49,6 @@ better yet, submit a PR and you'll get credit for the whole thing.
 This is the most important information you can give us in this bug report.
 Without good information here, it will take much longer to get your issue
 resolved!
-
-The best strategy here is to assume the maintainer reading this just started
-working on the Ganache project yesterday.
 
 If possible, please provide a link to a live example, or an unambiguous set of
 steps to reproduce this bug. Include code to reproduce, if relevant.
@@ -83,20 +65,18 @@ steps to reproduce this bug. Include code to reproduce, if relevant.
 How has this issue affected you? What are you trying to accomplish? Is this
 issue likely to block you or others from getting your work done?
 
-This is the best place to try to convince us that this issue needs to be solved
-ASAP (if necessary), and to help us to understand what our code must stand up to
-in the real world.
-
 -->
 
 ## Your Environment
-* Version used:
+* Version:
+* OS: [ ] OSX, [ ] Linux, [ ] Windows
+* OS Version: 
 * Version of Truffle/Remix/Other tools used:
-* NodeJS Version: [ ] 6.x, [ ] 7.x (unsupported), [ ] 8.x, [ ] 9.x
-* Operating System and version (include distro if Linux):
-* Link to your project or repro gist:
-* Commit hash to use with above link for reproduction:
+* NodeJS Version: 
+* Commit hash: 
 * I intend to submit a pull request to fix this issue: [ ] 
 
-<!--- When you're finished with the above, please delete these comments to avoid
+<!--- When you're finished with the above, you may need to delete these comments to avoid
 whitespace formatting issues -->
+
+<!--- Modified from: https://github.com/trufflesuite/ganache-cli/blob/v7.0.0-beta.0/ISSUE_TEMPLATE.md -->
