@@ -1,14 +1,10 @@
-<p align="center">
-  <em>NOTICE</em>: <code>testrpc</code> is now <code>ganache-cli</code>. Use it just as you would <code>testrpc</code>.
-</p>
-<hr/>
-
 [![npm](https://img.shields.io/npm/v/ganache-cli.svg)]()
 [![npm](https://img.shields.io/npm/dm/ganache-cli.svg)]()
-[![Build Status](https://travis-ci.org/trufflesuite/ganache-cli.svg?branch=master)](https://travis-ci.org/trufflesuite/ganache-cli)  
+[![Build Status](https://travis-ci.org/trufflesuite/ganache-cli.svg?branch=master)](https://travis-ci.org/trufflesuite/ganache-cli)
+*NOTICE*: `testrpc` is now `ganache-cli`. Use it just as you would `testrpc`.
 
 <p align="center">
-  <img src="/resources/icons/ganache-cli-128x128.png">
+  <img src="https://github.com/ethereumjs/testrpc/blob/ganache-cli/resources/icons/ganache-cli-128x128.png?raw=true">
 </p>
 
 ## Welcome to Ganache CLI
@@ -18,7 +14,7 @@ Ganache CLI uses ethereumjs to simulate full client behavior and make developing
 
 ### Looking for TestRPC?
 
-If you came here expecting to find the TestRPC, you're in the right place! Truffle has taken the TestRPC under its wing and made it part of the Truffle suite of tools. From now on you can expect better support along with tons of new features that help make Ethereum development safer, easier, and more enjoyable. Use `ganache-cli` just as you would `testrpc`.
+If you came here expecting to find the TestRPC, you're in the right place! Truffle has taken the TestRPC under its wing and made it part of the Truffle suite of tools. From now on you can expect better support along with tons of new features that help make Ethereum development safer, easier, and more enjoyable. Use `ganache-cli` just as you would `testrpc`. 
 
 ### Installation
 
@@ -27,8 +23,6 @@ If you came here expecting to find the TestRPC, you're in the right place! Truff
 ```Bash
 npm install -g ganache-cli
 ```
-
-`ganache-cli` utilizes [`ganache-core`](https://github.com/trufflesuite/ganache-core) internally, which is distributed with optional native dependencies for increased performance. If these native dependencies fail to install on your system `ganache-cli` will automatically fallback to `ganache-core`’s pre-bundled JavaScript build.
 
 Having problems? Be sure to check out the [FAQ](https://github.com/trufflesuite/ganache-cli/wiki/FAQ) and if you're still having issues and you're sure its a problem with `ganache-cli` please open an issue.
 
@@ -49,23 +43,20 @@ Options:
 * `-n` or `--secure`: Lock available accounts by default (good for third party transaction signing)
 * `-m` or `--mnemonic`: Use a bip39 mnemonic phrase for generating a PRNG seed, which is in turn used for hierarchical deterministic (HD) account generation.
 * `-p` or `--port`: Port number to listen on. Defaults to 8545.
-* `-h` or `--host` or `--hostname`: Hostname to listen on. Defaults to 127.0.0.1 (defaults to 0.0.0.0 for Docker instances of ganache-cli).
+* `-h` or `--host` or `--hostname`: Hostname to listen on. Defaults to 127.0.0.1.
 * `-s` or `--seed`: Use arbitrary data to generate the HD wallet mnemonic to be used.
 * `-g` or `--gasPrice`: The price of gas in wei (defaults to 20000000000)
-* `-l` or `--gasLimit`: The block gas limit (defaults to 0x6691b7)
+* `-l` or `--gasLimit`: The block gas limit in wei (defaults to 0x6691b7)
 * `-f` or `--fork`: Fork from another currently running Ethereum client at a given block. Input should be the HTTP location and port of the other client, e.g. `http://localhost:8545`. You can optionally specify the block to fork from using an `@` sign: `http://localhost:8545@1599200`.
 * `-i` or `--networkId`: Specify the network id ganache-cli will use to identify itself (defaults to the current time or the network id of the forked blockchain if configured)
 * `--db`: Specify a path to a directory to save the chain database. If a database already exists, ganache-cli will initialize that chain instead of creating a new one.
 * `--debug`: Output VM opcodes for debugging
 * `--mem`: Output ganache-cli memory usage statistics. This replaces normal output.
-* `-q` or `--quiet`: Run ganache-cli without any logs.
 * `-v` or `--verbose`: Log all requests and responses to stdout
 * `-?` or `--help`: Display help information
 * `--version`: Display the version of ganache-cli
 * `--noVMErrorsOnRPCResponse`: Do not transmit transaction failures as RPC errors. Enable this flag for error reporting behaviour which is compatible with other clients such as geth and Parity.
-* `--allowUnlimitedContractSize`: Allows unlimited contract sizes while debugging. By enabling this flag, the check within the EVM for contract size limit of 24KB (see EIP-170) is bypassed. Enabling this flag **will** cause ganache-cli to behave differently than production environments.
-* `--keepAliveTimeout`: Sets the HTTP server's `keepAliveTimeout` in milliseconds. See the [NodeJS HTTP docs](https://nodejs.org/api/http.html#http_server_keepalivetimeout) for details. `5000` by default.
-* `-t` or `--time`: Date (ISO 8601) that the first block should start. Use this feature, along with the evm_increaseTime method to test time-dependent code.
+* `--allowUnlimitedContractSize`: Allows unlimited contract sizes while debugging. By enabling this flag, the check within the EVM for contract size limit of 2KB (see EIP-170) is bypassed. Enabling this flag **will** cause ganache-cli to behave differently than production environments.
 
 Special Options:
 
@@ -127,8 +118,7 @@ Both `.provider()` and `.server()` take a single object which allows you to spec
 * `"db_path"`: `String` - Specify a path to a directory to save the chain database. If a database already exists, `ganache-cli` will initialize that chain instead of creating a new one.
 * `"account_keys_path"`: `String` - Specifies a file to save accounts and private keys to, for testing.
 * `"vmErrorsOnRPCResponse"`: `boolean` - Whether or not to transmit transaction failures as RPC errors. Set to `false` for error reporting behaviour which is compatible with other clients such as geth and Parity.
-* `"allowUnlimitedContractSize"`: `boolean` - Allows unlimited contract sizes while debugging. By setting this to `true`, the check within the EVM for contract size limit of 24KB (see [EIP-170](https://git.io/vxZkK)) is bypassed. Setting this to true **will** cause ganache-core to behave differently than production environments. (default: `false`; **ONLY** set to `true` during debugging).
-* `"keepAliveTimeout"`: Sets the HTTP server's `keepAliveTimeout` in milliseconds. See the [NodeJS HTTP docs](https://bit.ly/2Cr0ZEh) for details. `5000` by default.
+* `"allowUnlimitedContractSize"`: `boolean` - Allows unlimited contract sizes while debugging. By setting this to `true`, the check within the EVM for contract size limit of 2KB (see [EIP-170](https://git.io/vxZkK)) is bypassed. Setting this to true **will** cause ganache-core to behave differently than production environments. (default: `false`; **ONLY** set to `true` during debugging).
 
 ### Implemented Methods
 
@@ -189,7 +179,7 @@ There’s also special non-standard methods that aren’t included within the or
 * `evm_snapshot` : Snapshot the state of the blockchain at the current block. Takes no parameters. Returns the integer id of the snapshot created.
 * `evm_revert` : Revert the state of the blockchain to a previous snapshot. Takes a single parameter, which is the snapshot id to revert to. If no snapshot id is passed it will revert to the latest snapshot. Returns `true`.
 * `evm_increaseTime` : Jump forward in time. Takes one parameter, which is the amount of time to increase in seconds. Returns the total time adjustment, in seconds.
-* `evm_mine` : Force a block to be mined. Takes one optional parameter, which is the timestamp a block should setup as the mining time. Mines a block independent of whether or not mining is started or stopped.
+* `evm_mine` : Force a block to be mined. Takes no parameters. Mines a block independent of whether or not mining is started or stopped.
 
 ### Unsupported Methods
 
@@ -210,12 +200,6 @@ the run command:
 docker run -d -p 8545:8545 trufflesuite/ganache-cli:latest -a 10 --debug
 ```
 
-The Docker container adds an environment variable `DOCKER=true`; when this variable is set to `true` (case insensitive), `ganache-cli` use a default hostname IP of `0.0.0.0` instead of the normal default `127.0.0.1`. You can still specify a custom hostname however:
-
-```Bash
-docker run -d -p 8545:8545 trufflesuite/ganache-cli:latest -h XXX.XXX.XXX.XXX
-```
-
 To build the Docker container from source:
 
 ```Bash
@@ -226,7 +210,5 @@ docker build -t trufflesuite/ganache-cli .
 
 ### Contributing to Ganache CLI
 
-The Ganache CLI repository contains the cli logic and Docker config/build only. It utilizes [ganache-core](https://github.com/trufflesuite/ganache-core), the core logic powering [Ganache](https://github.com/trufflesuite/ganache), internally.
-
-You can contribute to the core code at [ganache-core](https://github.com/trufflesuite/ganache-core).
+This is a distribution package where the core code is bundled to support browsers and reduce installation issues on all platforms. You can contribute to the core code via [ganache-core](https://github.com/trufflesuite/ganache-core).
 
