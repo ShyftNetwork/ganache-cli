@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
 // make sourcemaps work!
-require("source-map-support/register")
+require('source-map-support').install();
 
 var yargs = require("yargs");
 var pkg = require("./package.json");
+var {toChecksumAddress, BN} = require("ethereumjs-util");
 var ganache;
 try {
   ganache = require("./lib");
@@ -15,7 +16,6 @@ var to = ganache.to;
 var URL = require("url");
 var fs = require("fs");
 var initArgs = require("./args")
-var BN = require("bn.js");
 
 var detailedVersion = "Ganache CLI v" + pkg.version + " (ganache-core: " + ganache.version + ")";
 
@@ -83,6 +83,7 @@ var options = {
   blockTime: argv.b,
   gasPrice: argv.g,
   gasLimit: argv.l,
+  callGasLimit: argv.callGasLimit,
   accounts: parseAccounts(argv.account),
   unlocked_accounts: argv.unlock,
   fork: argv.f,
@@ -91,7 +92,7 @@ var options = {
   verbose: argv.v,
   secure: argv.n,
   db_path: argv.db,
-  account_keys_path: argv.acctKeys,
+  account_keys_path: argv.account_keys_path,
   vmErrorsOnRPCResponse: !argv.noVMErrorsOnRPCResponse,
   logger: logger,
   allowUnlimitedContractSize: argv.allowUnlimitedContractSize,
@@ -135,10 +136,13 @@ server.listen(options.port, options.hostname, function(err, result) {
 
   var accounts = state.accounts;
   var addresses = Object.keys(accounts);
+  var ethInWei = new BN("1000000000000000000");
 
   addresses.forEach(function(address, index) {
-    var balance = new BN(accounts[address].account.balance).divRound(new BN("1000000000000000000")).toString();
-    var line = "(" + index + ") " + address + " (~" + balance + " ETH)";
+    var balance = new BN(accounts[address].account.balance);
+    var strBalance = balance.divRound(ethInWei).toString();
+    var about = balance.mod(ethInWei).isZero() ? "" : "~";
+    var line = `(${index}) ${toChecksumAddress(address)} (${about}${strBalance} ETH)`;
 
     if (state.isUnlocked(address) == false) {
       line += " 🔒";
@@ -158,17 +162,7 @@ server.listen(options.port, options.hostname, function(err, result) {
 
   if (options.account_keys_path != null) {
     console.log("");
-    console.log("Saving accounts and keys to " + options.account_keys_path);
-    var obj = {}
-    obj.addresses = accounts;
-    obj.private_keys = {};
-    addresses.forEach(function(address, index) {
-       obj.private_keys[address] = accounts[address].secretKey.toString("hex");
-    });
-    var json = JSON.stringify(obj);
-    fs.writeFile(options.account_keys_path, json, 'utf8',function(err){
-      if(err) throw err;
-    })
+    console.log("Accounts and keys saved to " + options.account_keys_path);
   }
 
   if (options.accounts == null) {
@@ -193,12 +187,19 @@ server.listen(options.port, options.hostname, function(err, result) {
     console.log(options.gasLimit);
   }
 
+  if (options.callGasLimit) {
+    console.log("");
+    console.log("Call Gas Limit");
+    console.log("==================");
+    console.log(options.callGasLimit);
+  }
+
   if (options.fork) {
     console.log("");
     console.log("Forked Chain");
     console.log("==================");
     console.log("Location:    " + fork_address);
-    console.log("Block:       " + to.number(state.blockchain.fork_block_number));
+    console.log("Block:       " + to.number(state.blockchain.forkBlockNumber));
     console.log("Network ID:  " + state.net_version);
     console.log("Time:        " + (state.blockchain.startTime || new Date()).toString());
   }
