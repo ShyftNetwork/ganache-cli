@@ -13,8 +13,6 @@ try {
   ganache = require("./build/ganache-core.node.cli.js");
 }
 var to = ganache.to;
-var URL = require("url");
-var fs = require("fs");
 var initArgs = require("./args")
 
 var detailedVersion = "Ganache CLI v" + pkg.version + " (ganache-core: " + ganache.version + ")";
@@ -87,47 +85,76 @@ var options = {
   accounts: parseAccounts(argv.account),
   unlocked_accounts: argv.unlock,
   fork: argv.f,
+  forkCacheSize: argv.forkCacheSize,
   hardfork: argv.k,
   network_id: argv.i,
   verbose: argv.v,
   secure: argv.n,
   db_path: argv.db,
+  hd_path: argv.hdPath,
   account_keys_path: argv.account_keys_path,
   vmErrorsOnRPCResponse: !argv.noVMErrorsOnRPCResponse,
   logger: logger,
   allowUnlimitedContractSize: argv.allowUnlimitedContractSize,
   time: argv.t,
-  keepAliveTimeout: argv.keepAliveTimeout
-}
-
-var fork_address;
-
-// If we're forking from another client, don't try to use the same port.
-if (options.fork) {
-  var split = options.fork.split("@");
-  fork_address = split[0];
-  var block;
-  if (split.length > 1) {
-    block = split[1];
-  }
-
-  if (URL.parse(fork_address).port == options.port) {
-    options.port = (parseInt(options.port) + 1);
-  }
-
-  options.fork = fork_address + (block != null ? "@" + block : "");
+  keepAliveTimeout: argv.keepAliveTimeout,
+  _chainId: argv.chainId,
+  // gross!
+  _chainIdRpc: argv.chainId
 }
 
 var server = ganache.server(options);
 
 console.log(detailedVersion);
 
-server.listen(options.port, options.hostname, function(err, result) {
+let started = false;
+process.on("uncaughtException", function(e) {
+  if (started) {
+    console.log(e);
+  } else {
+    console.log(e.stack);
+  }
+  process.exit(1);
+})
+
+// See http://stackoverflow.com/questions/10021373/what-is-the-windows-equivalent-of-process-onsigint-in-node-js
+if (process.platform === "win32") {
+  require("readline").createInterface({
+    input: process.stdin,
+    output: process.stdout
+  })
+  .on("SIGINT", function () {
+    process.emit("SIGINT");
+  });
+}
+
+const closeHandler = function () {
+  // graceful shutdown
+  server.close(function(err) {
+    if (err) {
+      // https://nodejs.org/api/process.html#process_process_exit_code
+      // writes to process.stdout in Node.js are sometimes asynchronous and may occur over
+      // multiple ticks of the Node.js event loop. Calling process.exit(), however, forces
+      // the process to exit before those additional writes to stdout can be performed.
+      if(process.stdout._handle) process.stdout._handle.setBlocking(true);
+      console.log(err.stack || err);
+      process.exit();
+    } else {
+      process.exit(0);
+    }
+  });
+}
+
+process.on("SIGINT", closeHandler);
+process.on("SIGTERM", closeHandler);
+process.on("SIGHUP", closeHandler);
+
+function startGanache(err, result) {
   if (err) {
     console.log(err);
     return;
   }
-
+  started = true;
   var state = result ? result : server.provider.manager.state;
 
   console.log("");
@@ -198,38 +225,21 @@ server.listen(options.port, options.hostname, function(err, result) {
     console.log("");
     console.log("Forked Chain");
     console.log("==================");
-    console.log("Location:    " + fork_address);
-    console.log("Block:       " + to.number(state.blockchain.forkBlockNumber));
-    console.log("Network ID:  " + state.net_version);
-    console.log("Time:        " + (state.blockchain.startTime || new Date()).toString());
+    console.log("Location:       " + state.blockchain.options.fork);
+    console.log("Block:          " + to.number(state.blockchain.forkBlockNumber));
+    console.log("Network ID:     " + state.net_version);
+    console.log("Time:           " + (state.blockchain.startTime || new Date()).toString());
+    let maxCacheSize;
+    if (options.forkCacheSize === -1) {
+      maxCacheSize = "∞";
+    } else {
+      maxCacheSize = options.forkCacheSize + " bytes";
+    }
+    console.log("Max Cache Size: " + maxCacheSize);
   }
 
   console.log("");
   console.log("Listening on " + options.hostname + ":" + options.port);
-});
-
-process.on('uncaughtException', function(e) {
-  console.log(e.stack);
-  process.exit(1);
-})
-
-// See http://stackoverflow.com/questions/10021373/what-is-the-windows-equivalent-of-process-onsigint-in-node-js
-if (process.platform === "win32") {
-  require("readline").createInterface({
-    input: process.stdin,
-    output: process.stdout
-  })
-  .on("SIGINT", function () {
-    process.emit("SIGINT");
-  });
 }
 
-process.on("SIGINT", function () {
-  // graceful shutdown
-  server.close(function(err) {
-    if (err) {
-      console.log(err.stack || err);
-    }
-    process.exit();
-  });
-});
+server.listen(options.port, options.hostname, startGanache);
